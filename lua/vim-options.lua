@@ -5,5 +5,4 @@ vim.cmd("set shiftwidth=2")
 vim.cmd("set number")
 vim.cmd("set relativenumber")
 vim.g.mapleader= " "
-
-
+vim.api.nvim_set_option("clipboard","unnamed")
