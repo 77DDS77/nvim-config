@@ -25,7 +25,7 @@ return {
       -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guide/integrate-with-mason-nvim.md
       require("mason").setup({})
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "tsserver", "angularls", "html" },
+        ensure_installed = { "lua_ls", "tsserver", "angularls", "html", "cssls", "tailwindcss" },
         handlers = {
           function(server_name)
             require("lspconfig")[server_name].setup({})
@@ -43,6 +43,9 @@ return {
                 vim.lsp.protocol.make_client_capabilities()
               ),
               require'lspconfig'.cssls.setup {
+                capabilities = capabilities,
+              },
+              require'lspconfig'.tailwindcss.setup {
                 capabilities = capabilities,
               }
             })
