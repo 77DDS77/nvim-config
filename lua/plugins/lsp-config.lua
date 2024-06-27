@@ -49,7 +49,8 @@ return {
                 capabilities = capabilities,
               }
             })
-            vim.api.nvim_exec([[autocmd BufNewFile,BufRead *.html set filetype=html]], false)
+            -- Commentato perche probabilmente non serve - cit.
+            -- vim.api.nvim_exec([[autocmd BufNewFile,BufRead *.html set filetype=html]], false)
           end,
         },
       })
