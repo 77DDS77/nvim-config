@@ -17,9 +17,11 @@ return {
           "<cmd>lua vim.lsp.buf.code_action()<CR>",
           { desc = "[C]ode [A]ctions" }
         )
-        vim.keymap.set("n", "gf", "<cmd>lua vim.lsp.buf.format()<CR>", { desc = "Format buffer" })
       end)
-      require("lspconfig").tsserver.setup({})
+      require("lspconfig").tsserver.setup({
+                filetypes = { "typescript", "javascript", "typescriptreact", "typescript.tsx" },
+                root_dir = function() return vim.loop.cwd() end
+            })
 
       -- to learn how to use mason.nvim
       -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guide/integrate-with-mason-nvim.md

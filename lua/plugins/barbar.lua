@@ -13,7 +13,7 @@ return {
             -- your configuration options here
             icons = {
                 diagnostics = {
-                    [vim.diagnostic.severity.ERROR] = { enabled = true, icon = " " },
+                    [vim.diagnostic.severity.ERROR] = { enabled = true, icon = " " },
                     [vim.diagnostic.severity.WARN] = { enabled = false },
                     [vim.diagnostic.severity.INFO] = { enabled = false },
                     [vim.diagnostic.severity.HINT] = { enabled = true },
