@@ -4,7 +4,7 @@ return {
     build = ':TSUpdate',
     config = function()
         require('nvim-treesitter.configs').setup {
-            ensure_installed = require('configs.treesitter.parsers').install_automatically(),
+            ensure_installed = require('gmr.configs.treesitter.parsers').install_automatically(),
             sync_install = false,
             auto_install = false,
             ignore_install = {},

@@ -1,35 +1,17 @@
 return {
-	"williamboman/mason.nvim",
-	dependencies = {
-		"williamboman/mason-lspconfig.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-	},
-	config = function()
-		local mason = require("mason")
-		local mason_lspconfig = require("mason-lspconfig")
-		local mason_tool_installer = require("mason-tool-installer")
+    'williamboman/mason.nvim',
+    event = 'BufReadPost',
+    config = function()
+        require('mason').setup {
+            ui = {
+                border = 'single',
+                height = 0.8,
+            },
+        }
 
-		mason.setup({})
-
-		mason_lspconfig.setup({
-			ensure_installed = {
-				"tsserver",
-				"angularls",
-				"lua_ls",
-				"html",
-				"cssls",
-				"tailwindcss",
-			},
-			automatic_installation = true,
-		})
-
-		mason_tool_installer.setup({
-			ensure_installed = {
-				"prettier",
-				"stylua",
-				"eslint_d",
-				"prettierd",
-			},
-		})
-	end,
+        vim.api.nvim_create_user_command('MasonInstallAll', function()
+            local packages = require 'configs.mason.packages'
+            vim.cmd('MasonInstall ' .. table.concat(packages, ' '))
+        end, {})
+    end,
 }
