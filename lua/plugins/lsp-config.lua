@@ -1,120 +1,110 @@
 return {
-    --- Uncomment the two plugins below if you want to manage the language servers from neovim
-    { "williamboman/mason.nvim" },
-    { "williamboman/mason-lspconfig.nvim" },
-    {
-        "VonHeikemen/lsp-zero.nvim",
-        branch = "v3.x",
-        config = function()
-            local lsp_zero = require("lsp-zero")
-            lsp_zero.extend_lspconfig()
-            lsp_zero.on_attach(function(client, bufnr)
-                -- see :help lsp-zero-keybindings
-                lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false, exclude = { "<F4>", "<F3>" } })
-                vim.keymap.set(
-                    "n",
-                    "<leader>ca",
-                    "<cmd>lua vim.lsp.buf.code_action()<CR>",
-                    { desc = "[C]ode [A]ctions" }
-                )
-            end)
-            require("lspconfig").tsserver.setup({
-                filetypes = { "typescript", "javascript", "typescriptreact", "typescript.tsx" },
-                root_dir = function()
-                    return vim.loop.cwd()
-                end,
-            })
+	"neovim/nvim-lspconfig",
+	event = { "BufReadPre", "BufNewFile" },
+	dependencies = {
+		"hrsh7th/cmp-nvim-lsp",
+	},
+	enabled = true,
+	config = function()
+		local lspconfig = require("lspconfig")
+		local util = require("lspconfig.util")
+		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
-            -- to learn how to use mason.nvim
-            -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guide/integrate-with-mason-nvim.md
-            require("mason").setup({})
-            require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "tsserver", "angularls", "html", "cssls", "tailwindcss" },
-                handlers = {
-                    function(server_name)
-                        require("lspconfig")[server_name].setup({})
-                    end,
-                    angularls = function()
-                        require("lspconfig")["angularls"].setup({
-                            filetypes = { "typescript", "html", "typescriptreact", "typescript.tsx", "angular.html" },
-                            settings = {
-                                angular = {
-                                    provideAutocomplete = true,
-                                    validate = true,
-                                },
-                            },
-                            capabilities = require("cmp_nvim_lsp").default_capabilities(
-                                vim.lsp.protocol.make_client_capabilities()
-                            ),
-                            require("lspconfig").cssls.setup({
-                                capabilities = capabilities,
-                            }),
-                            require("lspconfig").tailwindcss.setup({
-                                capabilities = capabilities,
-                            }),
-                        })
-                        -- Commentato perche probabilmente non serve - cit.
-                        -- vim.api.nvim_exec([[autocmd BufNewFile,BufRead *.html set filetype=html]], false)
-                    end,
-                },
-            })
-        end,
-    },
-    { "neovim/nvim-lspconfig" },
-    { "hrsh7th/cmp-nvim-lsp" },
-    {
-        "hrsh7th/nvim-cmp",
-        dependencies = {
-            "brenoprata10/nvim-highlight-colors",
-        },
-        config = function()
-            local cmp = require("cmp")
+		-- Disable inline error messages
+		vim.diagnostic.config({
+			virtual_text = false,
+			float = {
+				border = "single",
+			},
+		})
 
-            require("luasnip.loaders.from_vscode").lazy_load()
+		-- Add border to floating window
+		vim.lsp.handlers["textDocument/signatureHelp"] =
+			vim.lsp.with(vim.lsp.handlers.hover, { border = "single", silent = true })
+		vim.lsp.handlers["textDocument/hover"] =
+			vim.lsp.with(vim.lsp.handlers.hover, { border = "single", silend = true })
 
-            cmp.setup({
-                sources = {
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" },
-                },
-                formatting = {
-                    format = require("nvim-highlight-colors").format,
-                },
-                mapping = {
-                    ["<CR>"] = cmp.mapping.confirm({ select = false }),
-                    ["<C-e>"] = cmp.mapping.abort(),
-                    ["<Up>"] = cmp.mapping.select_prev_item({ behavior = "select" }),
-                    ["<Down>"] = cmp.mapping.select_next_item({ behavior = "select" }),
-                    ["<C-p>"] = cmp.mapping(function()
-                        if cmp.visible() then
-                            cmp.select_prev_item({ behavior = "insert" })
-                        else
-                            cmp.complete()
-                        end
-                    end),
-                    ["<C-n>"] = cmp.mapping(function()
-                        if cmp.visible() then
-                            cmp.select_next_item({ behavior = "insert" })
-                        else
-                            cmp.complete()
-                        end
-                    end),
-                },
-                snippet = {
-                    expand = function(args)
-                        require("luasnip").lsp_expand(args.body)
-                    end,
-                },
-            })
-        end,
-    },
-    {
-        "L3MON4D3/LuaSnip",
-        dependencies = {
-            "rafamadriz/friendly-snippets",
-        },
-    },
-    { "hrsh7th/cmp-buffer" },
-    { "hrsh7th/cmp-path" },
-    { "saadparwaiz1/cmp_luasnip" },
+		-- Make float window transparent start
+
+		local set_hl_for_floating_window = function()
+			vim.api.nvim_set_hl(0, "NormalFloat", {
+				link = "Normal",
+			})
+			vim.api.nvim_set_hl(0, "FloatBorder", {
+				bg = "none",
+			})
+		end
+
+		set_hl_for_floating_window()
+
+		vim.api.nvim_create_autocmd("ColorScheme", {
+			pattern = "*",
+			desc = "Avoid overwritten by loading color schemes later",
+			callback = set_hl_for_floating_window,
+		})
+
+		-- Make float window transparent end
+
+		local on_attach = function(client, bufnr)
+			-- vim.keymap.set(
+			-- 	"n",
+			-- 	"<leader>d",
+			-- 	vim.diagnostic.open_float,
+			-- 	{ buffer = bufnr, desc = "Show diagnostics for line" }
+			-- )
+		end
+
+		local capabilities = cmp_nvim_lsp.default_capabilities()
+		local signs = { Error = "❌", Warn = "", Hint = "󰠠", Info = "" }
+		for type, icon in pairs(signs) do
+			local hl = "DiagnosticSign" .. type
+			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+		end
+
+		-- configure typescript server with plugin
+		lspconfig["tsserver"].setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+		})
+
+		-- configure html server
+		lspconfig["html"].setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+		})
+
+		-- configure angular server
+		lspconfig["angularls"].setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+			root_dir = util.root_pattern("angular.json", "package.json"),
+		})
+
+		-- configure lua server (with special settings)
+		lspconfig["lua_ls"].setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+			settings = { -- custom settings for lua
+				Lua = {
+					-- make the language server recognize "vim" global
+					diagnostics = {
+						globals = { "vim" },
+					},
+					workspace = {
+						-- make language server aware of runtime files
+						library = {
+							[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+							[vim.fn.stdpath("config") .. "/lua"] = true,
+						},
+					},
+				},
+			},
+		})
+
+		-- configure css server
+		lspconfig["cssls"].setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+		})
+	end,
 }
