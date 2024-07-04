@@ -21,12 +21,14 @@ return {
 					},
 				}),
 				formatting.stylua,
-				diagnostics.eslint_d.with({
-					condition = function(utils)
-						return utils.root_has_file({ ".eslintrc.js", ".eslintrc.cjs" })
-					end,
-				}),
+				-- diagnostics.eslint_d.with({
+				-- 	condition = function(utils)
+				-- 		return utils.root_has_file({ ".eslintrc.js", ".eslintrc.cjs" })
+				-- 	end,
+				-- }),
 			},
 		})
+
+		vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, { desc = "[F]ormat" })
 	end,
 }
