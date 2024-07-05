@@ -106,5 +106,9 @@ return {
 			capabilities = capabilities,
 			on_attach = on_attach,
 		})
+
+        lspconfig["tailwindcss"].setup({
+            capabilities = capabilities,
+        })
 	end,
 }
