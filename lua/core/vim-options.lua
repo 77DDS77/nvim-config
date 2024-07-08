@@ -60,3 +60,6 @@ vim.opt.termguicolors = true
 vim.diagnostic.config({
 	update_in_insert = true,
 })
+
+-- session option for auto-session.nvim
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
