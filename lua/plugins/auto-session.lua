@@ -24,10 +24,11 @@ return {
 					buftypes_to_ignore = {}, -- list of buffer types that should not be deleted from current session when a new one is loaded
 				},
 
-                -- Set mapping for searching a session.
-                vim.keymap.set("n", "<leader>sl", require("auto-session.session-lens").search_session, {
-                  noremap = true, desc = "[S]ession [List]"
-                })
+				-- Set mapping for searching a session.
+				vim.keymap.set("n", "<leader>sl", require("auto-session.session-lens").search_session, {
+					noremap = true,
+					desc = "[S]ession [L]ist",
+				}),
 			})
 		end,
 	},
