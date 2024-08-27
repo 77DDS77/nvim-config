@@ -1,6 +1,7 @@
 return {
 	"nvim-neo-tree/neo-tree.nvim",
 	branch = "v3.x",
+    event = 'VimEnter',
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
@@ -11,8 +12,11 @@ return {
 		require("neo-tree").setup({
 			filesystem = {
 				follow_current_file = {
-                    enabled = true
-                },
+					enabled = true,
+				},
+			},
+			window = {
+				width = 40,
 			},
 		})
 		vim.keymap.set("n", "<C-b>", ":Neotree filesystem toggle right<CR>", {})

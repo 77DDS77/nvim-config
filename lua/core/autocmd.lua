@@ -37,6 +37,23 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		--  Symbols are things like variables, functions, types, etc.
 		map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
 
+		-- Find File on the working directory
+		map("<C-p>", require("telescope.builtin").find_files, "[F]ind [F]ile")
+
+		-- Fuzzy search the working directory
+		map("<leader>fg", require("telescope.builtin").live_grep, "Live Grep")
+
+		-- List all the acrive buffers
+		map("<leader>fb", require("telescope.builtin").buffers, "[F]ind [B]uffers")
+
+		map("<leader>jl", require("telescope.builtin").jumplist, "[J]ump [L]ist")
+
+		-- Fuzzy search the current buffer
+		map("<leader>sb", require("telescope.builtin").current_buffer_fuzzy_find, "[S]earch current [B]uffer")
+
+		-- List all the possible commands, execute them on <CR>
+		map("<leader>cmd", require("telescope.builtin").commands, "[c]o[M]mman[D]s")
+
 		-- Fuzzy find all the symbols in your current workspace.
 		--  Similar to document symbols, except searches over your entire project.
 		map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
