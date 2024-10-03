@@ -26,7 +26,13 @@ return {
 			)
 		end
 
-		local underline_color = "#97CA72"
+        local underline_green = "#97CA72"
+        local underline_red = "#FA0305"
+        local unused = ""
+
+        --TODO trovare una maniera per cambiare dinamicamente
+        --underline_color in base ai diagnostics
+		local underline_color = underline_green
 
 		bufferline.setup({
 			options = {
@@ -51,6 +57,9 @@ return {
 
 						if error ~= 0 then
 							table.insert(result, { text = "  " .. error, link = "DiagnosticError" })
+                            underline_color = underline_red
+                        else
+                            underline_color = underline_green
 						end
 
 						if warning ~= 0 then
@@ -90,6 +99,38 @@ return {
 					sp = underline_color,
 				},
 				duplicate_selected = {
+					underline = true,
+					sp = underline_color,
+				},
+				hint = {
+					underline = true,
+					sp = underline_color,
+				},
+				-- hint_diagnostic = {
+				-- 	underline = true,
+				-- 	sp = underline_color,
+				-- },
+				hint_selected = {
+					underline = true,
+					sp = underline_color,
+				},
+				hint_diagnostic_selected = {
+					underline = true,
+					sp = underline_color,
+				},
+				error = {
+					underline = true,
+					sp = underline_color,
+				},
+				error_diagnostic = {
+					underline = true,
+					sp = underline_color,
+				},
+				error_selected = {
+					underline = true,
+					sp = underline_color,
+				},
+				error_diagnostic_selected = {
 					underline = true,
 					sp = underline_color,
 				},
