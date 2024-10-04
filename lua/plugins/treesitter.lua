@@ -16,6 +16,7 @@ return {
 				"bash",
 				"markdown",
 				"markdown_inline",
+                "jsdoc"
 			},
 			indent = { enable = true },
 			highlight = {
